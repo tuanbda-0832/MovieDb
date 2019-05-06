@@ -18,3 +18,4 @@
         android:name="com.example.moviedb.screen.search.SearchFragment"
         android:label="SearchFragment" />
 </navigation>
+

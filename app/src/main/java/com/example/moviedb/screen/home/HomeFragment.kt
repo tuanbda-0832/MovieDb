@@ -1,18 +1,16 @@
 package com.example.moviedb.screen.home
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-
+import androidx.lifecycle.Observer
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseFragment
 import com.example.moviedb.databinding.HomeFragmentBinding
-import com.example.moviedb.utils.liveData.autoCleared
-import org.koin.android.viewmodel.ext.android.viewModel
+import com.example.moviedb.utils.extensions.showToast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : BaseFragment() {
 
@@ -36,5 +34,16 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun bindView() {
+        registerLiveData()
+    }
+
+    private fun registerLiveData() {
+        _homeViewModel.getPopularMovies()
+        _homeViewModel.movies.observe(viewLifecycleOwner, Observer {
+            //todo later
+        })
+        _homeViewModel.onMessageError.observe(viewLifecycleOwner, Observer {
+            activity?.showToast(it)
+        })
     }
 }
