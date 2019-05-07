@@ -8,11 +8,11 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpView()
+        setUpView(view)
         bindView()
     }
 
-    protected abstract fun setUpView()
+    protected abstract fun setUpView(view: View)
 
     protected abstract fun bindView()
 }
