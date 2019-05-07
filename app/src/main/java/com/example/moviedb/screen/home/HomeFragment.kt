@@ -32,7 +32,7 @@ class HomeFragment : BaseFragment() {
         return _homeFragmentBinding.root
     }
 
-    override fun setUpView(view: View) {
+    override fun setUpView() {
     }
 
     override fun bindView() {

@@ -13,4 +13,8 @@
         android:name="com.example.moviedb.screen.favorires.FavoritesFragment"
         android:label="favories_fragment"
         tools:layout="@layout/favories_fragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.moviedb.screen.search.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

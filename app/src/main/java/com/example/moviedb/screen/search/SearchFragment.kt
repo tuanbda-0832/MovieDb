@@ -22,7 +22,7 @@ class SearchFragment : BaseFragment() {
         return inflater.inflate(R.layout.search_fragment, container, false)
     }
 
-    override fun setUpView(view: View) {
+    override fun setUpView() {
     }
 
     override fun bindView() {

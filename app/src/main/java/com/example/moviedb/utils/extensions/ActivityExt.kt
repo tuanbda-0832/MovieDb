@@ -8,10 +8,10 @@ fun AppCompatActivity.addFragmentToActivity(
     @IdRes containerId: Int, fragment: Fragment,
     addToBackStack: Boolean = true, tag: String = fragment::class.java.simpleName
 ) {
-    supportFragmentManager.beginTransaction().also {
+    supportFragmentManager.beginTransaction().run {
         if (addToBackStack) {
-            it.addToBackStack(tag)
+            addToBackStack(tag)
         }
-        it.add(containerId, fragment, tag).commit()
+        add(containerId, fragment, tag).commit()
     }
 }
