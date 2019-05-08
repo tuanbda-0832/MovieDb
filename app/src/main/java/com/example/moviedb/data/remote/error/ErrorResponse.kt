@@ -10,7 +10,7 @@ class ErrorResponse {
     val error: Error
         get() = mError ?: Error()
 
-    inner class Error {
+    class Error {
         @SerializedName("code")
         val code: Int = 0
         @SerializedName("description")
