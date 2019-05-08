@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseFragment
 import com.example.moviedb.databinding.FavoriesFragmentBinding
 
 class FavoritesFragment : BaseFragment() {
+
     companion object {
         fun newInstance() = FavoritesFragment()
     }
