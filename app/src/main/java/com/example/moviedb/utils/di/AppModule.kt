@@ -23,8 +23,8 @@ val appModule = module {
 }
 
 val networkModule = module {
-    single(name = "retrofit") { createRetrofit() }
-    single(name = "appApi") { createAppApi(get()) }
+    single { createRetrofit() }
+    single { createAppApi(get()) }
 }
 
 

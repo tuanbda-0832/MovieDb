@@ -5,6 +5,7 @@ import com.example.moviedb.base.BaseViewModel
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.data.remote.api.AppApi
 import com.example.moviedb.data.remote.error.RetrofitException
+import com.example.moviedb.utils.Constant
 import com.example.moviedb.utils.liveData.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

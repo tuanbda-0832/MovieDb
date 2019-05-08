@@ -43,7 +43,9 @@ class HomeFragment : BaseFragment() {
             //todo later
         })
         _homeViewModel.onMessageError.observe(viewLifecycleOwner, Observer {
-            activity?.showToast(it)
+            it?.let {
+                context?.showToast(it)
+            }
         })
     }
 }
