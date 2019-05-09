@@ -59,17 +59,15 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
         fun setGenres(view: TextView, genresIds: List<Int>, genres: List<Genre>) {
             val builder = StringBuilder()
-            genres.let {
-                for (id in genresIds) {
-                    for (genre in it) {
-                        if (genre.id == id) {
-                            builder.append("${genre.name}, ")
-                            break
-                        }
+            genresIds.forEach {
+                for (genre in genres) {
+                    if (genre.id == it) {
+                        builder.append("${genre.name}, ")
+                        break
                     }
                 }
             }
-            view.text = builder
+            view.text = builder.toString()
         }
     }
 }

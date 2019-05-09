@@ -1,10 +1,9 @@
 package com.example.moviedb
 
 import android.app.Application
-import com.example.moviedb.utils.di.appModule
-import com.example.moviedb.utils.di.datasourceModule
 import com.example.moviedb.utils.di.networkModule
 import com.example.moviedb.utils.di.repositoryModule
+import com.example.moviedb.utils.di.viewModelModule
 import org.koin.android.ext.android.startKoin
 
 class MainApplication : Application() {
@@ -14,10 +13,9 @@ class MainApplication : Application() {
         startKoin(
             this,
             arrayListOf(
-                appModule,
+                viewModelModule,
                 networkModule,
-                repositoryModule,
-                datasourceModule
+                repositoryModule
             )
         )
     }

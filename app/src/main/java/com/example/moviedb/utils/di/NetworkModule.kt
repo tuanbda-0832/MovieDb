@@ -1,27 +1,16 @@
 package com.example.moviedb.utils.di
 
-import com.example.moviedb.data.repository.HomeRepository
-import com.example.moviedb.data.source.HomeDatasource
 import com.example.moviedb.data.source.remote.api.AppApi
-import com.example.moviedb.data.source.remote.HomeRemoteDataSource
-import com.example.moviedb.screen.home.HomeViewModel
 import com.example.moviedb.utils.Constant
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val API_KEY_PARAM = "api_key"
-
-fun createRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-    .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-    .addConverterFactory(GsonConverterFactory.create())
-    .client(okHttpClient)
-    .baseUrl(Constant.BASE_URL).build()
 
 fun createAppApi(retrofit: Retrofit): AppApi =
     retrofit.create(AppApi::class.java)
@@ -41,26 +30,14 @@ fun createOkHttpClient(): OkHttpClient {
     return client.build()
 }
 
-fun createHomeRemoteDataSource(appApi: AppApi): HomeDatasource.Remote = HomeRemoteDataSource(appApi)
-
-fun createHomeRepository(homeRemoteDataSource: HomeDatasource.Remote): HomeRepository =
-    HomeRepository(homeRemoteDataSource)
-
-val appModule = module {
-    viewModel { HomeViewModel(get()) }
-}
+fun createRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+    .addConverterFactory(GsonConverterFactory.create())
+    .client(okHttpClient)
+    .baseUrl(Constant.BASE_URL).build()
 
 val networkModule = module {
     single { createRetrofit(get()) }
     single { createAppApi(get()) }
     single { createOkHttpClient() }
 }
-
-val datasourceModule = module {
-    single { createHomeRemoteDataSource(get()) }
-}
-val repositoryModule = module {
-    single { createHomeRepository(get()) }
-}
-
-

@@ -1,4 +1,4 @@
-package com.example.moviedb.screen.MovieDetailFragment
+package com.example.moviedb.screen.movied_edtail_fragment
 
 import com.example.moviedb.base.BaseViewModel
 

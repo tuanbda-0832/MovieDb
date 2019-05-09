@@ -1,4 +1,4 @@
-package com.example.moviedb.screen.MovieDetailFragment
+package com.example.moviedb.screen.movied_edtail_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
