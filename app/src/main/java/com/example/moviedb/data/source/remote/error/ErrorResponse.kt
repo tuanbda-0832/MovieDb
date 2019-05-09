@@ -1,4 +1,4 @@
-package com.example.moviedb.data.remote.error
+package com.example.moviedb.data.source.local.remote.error
 
 import com.google.gson.annotations.SerializedName
 

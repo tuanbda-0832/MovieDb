@@ -1,9 +1,6 @@
-package com.example.moviedb.data.remote.error
+package com.example.moviedb.data.source.local.remote.error
 
 import retrofit2.Response
-import java.io.IOException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
 class RetrofitException : RuntimeException {
 

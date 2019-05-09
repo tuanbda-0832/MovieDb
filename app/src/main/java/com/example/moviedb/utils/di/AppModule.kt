@@ -1,6 +1,9 @@
 package com.example.moviedb.utils.di
 
-import com.example.moviedb.data.remote.api.AppApi
+import com.example.moviedb.data.repository.HomeRepository
+import com.example.moviedb.data.source.HomeDatasource
+import com.example.moviedb.data.source.remote.api.AppApi
+import com.example.moviedb.data.source.remote.HomeRemoteDataSource
 import com.example.moviedb.screen.home.HomeViewModel
 import com.example.moviedb.utils.Constant
 import io.reactivex.schedulers.Schedulers
@@ -38,6 +41,11 @@ fun createOkHttpClient(): OkHttpClient {
     return client.build()
 }
 
+fun createHomeRemoteDataSource(appApi: AppApi): HomeDatasource.Remote = HomeRemoteDataSource(appApi)
+
+fun createHomeRepository(homeRemoteDataSource: HomeDatasource.Remote): HomeRepository =
+    HomeRepository(homeRemoteDataSource)
+
 val appModule = module {
     viewModel { HomeViewModel(get()) }
 }
@@ -47,3 +55,12 @@ val networkModule = module {
     single { createAppApi(get()) }
     single { createOkHttpClient() }
 }
+
+val datasourceModule = module {
+    single { createHomeRemoteDataSource(get()) }
+}
+val repositoryModule = module {
+    single { createHomeRepository(get()) }
+}
+
+
