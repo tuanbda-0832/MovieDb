@@ -23,13 +23,13 @@ class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapte
             parent,
             false
         )
-        return ViewHolder(homeAdapterBinding, _genres)
+        return ViewHolder(homeAdapterBinding, _genres, onItemClick)
     }
 
     override fun getItemCount(): Int = _movies.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(_movies.get(position), onItemClick)
+        holder.bind(_movies.get(position))
     }
 
     fun addData(movies: List<Movie>) {
@@ -47,18 +47,21 @@ class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapte
         }
     }
 
-    class ViewHolder(val itemHomeBinding: ItemHomeBinding, val genres: List<Genre>) :
+    class ViewHolder(
+        val itemHomeBinding: ItemHomeBinding,
+        val genres: List<Genre>,
+        onItemClick: (movie: Movie) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemHomeBinding.root) {
 
-
-        fun bind(movie: Movie, onItemClick: (movie: Movie) -> Unit) {
-            itemHomeBinding.run {
-                this.movie = movie
-                cardView.setOnClickListener {
-                    onItemClick(movie)
-                }
+        init {
+            itemHomeBinding.cardView.setOnClickListener {
+                itemHomeBinding.movie?.let(onItemClick)
             }
+        }
 
+        fun bind(movie: Movie) {
+            itemHomeBinding.movie = movie
             movie.genre_ids?.let {
                 setGenres(itemHomeBinding.textViewMovieGenres, it, genres)
             }
@@ -76,9 +79,5 @@ class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapte
             }
             view.text = builder.toString()
         }
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(movie: Movie)
     }
 }

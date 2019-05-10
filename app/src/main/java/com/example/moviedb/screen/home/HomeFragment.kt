@@ -11,15 +11,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseFragment
-import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.HomeFragmentBinding
-import com.example.moviedb.screen.home.HomeAdapter.OnItemClickListener
 import com.example.moviedb.screen.movied_edtail_fragment.MovieDetailFragment
 import com.example.moviedb.utils.extensions.showToast
 import com.example.moviedb.utils.liveData.autoCleared
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class HomeFragment : BaseFragment(){
+class HomeFragment : BaseFragment() {
     companion object {
 
         fun newInstance() = HomeFragment()
@@ -49,7 +47,7 @@ class HomeFragment : BaseFragment(){
     }
 
     override fun setUpView() {
-        _homeAdapter = HomeAdapter{
+        _homeAdapter = HomeAdapter {
             _onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
         }
         _homeFragmentBinding.run {

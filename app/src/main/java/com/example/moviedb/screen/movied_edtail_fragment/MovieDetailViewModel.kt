@@ -1,7 +1,34 @@
 package com.example.moviedb.screen.movied_edtail_fragment
 
+import androidx.lifecycle.MutableLiveData
 import com.example.moviedb.base.BaseViewModel
+import com.example.moviedb.data.model.Movie
+import com.example.moviedb.data.repository.HomeRepository
+import com.example.moviedb.data.source.local.remote.error.RetrofitException
+import com.example.moviedb.utils.liveData.SingleLiveEvent
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-class MovieDetailViewModel : BaseViewModel() {
-    // TODO: Implement the ViewModel
+class MovieDetailViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
+    val movie: MutableLiveData<Movie> = MutableLiveData()
+    val onMessageError = SingleLiveEvent<String>()
+
+    fun getMovieDetails(id: Int) {
+        addDisposable(
+            homeRepository.getMovieDetails(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { response, error ->
+                    response?.let {
+                        when (it.isSuccessful) {
+                            true -> movie.value = it.body()
+                            false -> onMessageError.value = RetrofitException.toHttpError(response).getMessageError()
+                        }
+                    }
+                    error?.let {
+                        onMessageError.value = RetrofitException.toUnexpectedError(it).getMessageError()
+                    }
+                }
+        )
+    }
 }
