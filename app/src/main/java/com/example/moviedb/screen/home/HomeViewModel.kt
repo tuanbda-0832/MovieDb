@@ -11,11 +11,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
+
     val movies: MutableLiveData<List<Movie>> = MutableLiveData()
 
     val onMessageError = SingleLiveEvent<String>()
 
     val genres: MutableLiveData<List<Genre>> = MutableLiveData()
+
+
 
     fun getPopularMovies(page: Int = 1) {
         addDisposable(
@@ -54,4 +57,6 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 }
         )
     }
+
+
 }

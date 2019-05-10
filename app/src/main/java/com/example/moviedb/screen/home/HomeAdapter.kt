@@ -10,7 +10,7 @@ import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.ItemHomeBinding
 
-class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
     private var _movies = mutableListOf<Movie>()
 
@@ -23,7 +23,7 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
             parent,
             false
         )
-        return ViewHolder(homeAdapterBinding, _genres)
+        return ViewHolder(homeAdapterBinding, _genres, onItemClick)
     }
 
     override fun getItemCount(): Int = _movies.size
@@ -47,8 +47,18 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
         }
     }
 
-    class ViewHolder(val itemHomeBinding: ItemHomeBinding, val genres: List<Genre>) :
+    class ViewHolder(
+        val itemHomeBinding: ItemHomeBinding,
+        val genres: List<Genre>,
+        onItemClick: (movie: Movie) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemHomeBinding.root) {
+
+        init {
+            itemHomeBinding.cardView.setOnClickListener {
+                itemHomeBinding.movie?.let(onItemClick)
+            }
+        }
 
         fun bind(movie: Movie) {
             itemHomeBinding.movie = movie

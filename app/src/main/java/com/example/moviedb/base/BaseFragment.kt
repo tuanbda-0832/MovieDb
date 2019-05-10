@@ -14,5 +14,10 @@ abstract class BaseFragment : Fragment() {
 
     protected abstract fun setUpView()
 
-    protected abstract fun bindView()
+    open protected fun bindView() {
+        registerLiveData()
+    }
+
+    open protected fun registerLiveData() {
+    }
 }
