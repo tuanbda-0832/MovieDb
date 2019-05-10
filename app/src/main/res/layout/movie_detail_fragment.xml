@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".screen.MovieDetailFragment.MovieDetailFragment">
+        tools:context=".screen.movied_edtail_fragment.MovieDetailFragment">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
