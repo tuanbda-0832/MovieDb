@@ -16,6 +16,8 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
     private var _genres = mutableListOf<Genre>()
 
+    private var _onItemClickListener: OnItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val homeAdapterBinding = DataBindingUtil.inflate<ItemHomeBinding>(
             LayoutInflater.from(parent.context),
@@ -29,7 +31,9 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
     override fun getItemCount(): Int = _movies.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(_movies.get(position))
+        _onItemClickListener?.let {
+            holder.bind(_movies.get(position), it)
+        }
     }
 
     fun addData(movies: List<Movie>) {
@@ -47,11 +51,19 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
         }
     }
 
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        _onItemClickListener = onItemClickListener
+    }
+
     class ViewHolder(val itemHomeBinding: ItemHomeBinding, val genres: List<Genre>) :
         RecyclerView.ViewHolder(itemHomeBinding.root) {
 
-        fun bind(movie: Movie) {
-            itemHomeBinding.movie = movie
+        fun bind(movie: Movie, onItemClickListener: OnItemClickListener) {
+            itemHomeBinding.run {
+                this.movie = movie
+                this.onItemClickListener = onItemClickListener
+            }
+
             movie.genre_ids?.let {
                 setGenres(itemHomeBinding.textViewMovieGenres, it, genres)
             }
@@ -69,5 +81,9 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
             }
             view.text = builder.toString()
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(movie: Movie)
     }
 }

@@ -9,6 +9,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:clickable="true"
+        android:focusable="true"
         tools:context=".screen.movied_edtail_fragment.MovieDetailFragment">
 
     </androidx.constraintlayout.widget.ConstraintLayout>

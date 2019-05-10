@@ -8,6 +8,10 @@
         <variable
             name="movie"
             type="com.example.moviedb.data.model.Movie" />
+
+        <variable
+            name="onItemClickListener"
+            type="com.example.moviedb.screen.home.HomeAdapter.OnItemClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -15,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_8"
+        android:onClick="@{()-> onItemClickListener.onItemClick(movie)}"
         app:cardCornerRadius="@dimen/dp_4">
 
         <androidx.constraintlayout.widget.ConstraintLayout
