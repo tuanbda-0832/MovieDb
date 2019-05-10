@@ -10,13 +10,11 @@ import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.ItemHomeBinding
 
-class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
     private var _movies = mutableListOf<Movie>()
 
     private var _genres = mutableListOf<Genre>()
-
-    private var _onItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val homeAdapterBinding = DataBindingUtil.inflate<ItemHomeBinding>(
@@ -31,9 +29,7 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
     override fun getItemCount(): Int = _movies.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        _onItemClickListener?.let {
-            holder.bind(_movies.get(position), it)
-        }
+        holder.bind(_movies.get(position), onItemClick)
     }
 
     fun addData(movies: List<Movie>) {
@@ -51,17 +47,16 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
         }
     }
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
-        _onItemClickListener = onItemClickListener
-    }
-
     class ViewHolder(val itemHomeBinding: ItemHomeBinding, val genres: List<Genre>) :
         RecyclerView.ViewHolder(itemHomeBinding.root) {
 
-        fun bind(movie: Movie, onItemClickListener: OnItemClickListener) {
+
+        fun bind(movie: Movie, onItemClick: (movie: Movie) -> Unit) {
             itemHomeBinding.run {
                 this.movie = movie
-                this.onItemClickListener = onItemClickListener
+                cardView.setOnClickListener {
+                    onItemClick(movie)
+                }
             }
 
             movie.genre_ids?.let {

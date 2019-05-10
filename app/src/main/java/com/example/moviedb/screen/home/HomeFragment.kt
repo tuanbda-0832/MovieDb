@@ -19,7 +19,7 @@ import com.example.moviedb.utils.extensions.showToast
 import com.example.moviedb.utils.liveData.autoCleared
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class HomeFragment : BaseFragment(), OnItemClickListener {
+class HomeFragment : BaseFragment(){
     companion object {
 
         fun newInstance() = HomeFragment()
@@ -49,8 +49,9 @@ class HomeFragment : BaseFragment(), OnItemClickListener {
     }
 
     override fun setUpView() {
-        _homeAdapter = HomeAdapter()
-        _homeAdapter.setOnItemClickListener(this)
+        _homeAdapter = HomeAdapter{
+            _onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
+        }
         _homeFragmentBinding.run {
             recyclerViewHome.run {
                 adapter = _homeAdapter
@@ -58,10 +59,6 @@ class HomeFragment : BaseFragment(), OnItemClickListener {
                 setHasFixedSize(true)
             }
         }
-    }
-
-    override fun onItemClick(movie: Movie) {
-        _onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(movie.id))
     }
 
     override fun onDetach() {
