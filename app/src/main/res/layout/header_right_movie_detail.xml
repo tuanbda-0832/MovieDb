@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="movie"
-            type="com.example.moviedb.data.model.Movie" />
+            name="movieDetail"
+            type="com.example.moviedb.data.model.MovieDetail" />
     </data>
 
     <LinearLayout
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_8"
-                android:text="@{@string/text_rating(movie.vote_average)}"
+                android:text="@{@string/text_rating(movieDetail.vote_average)}"
                 app:layout_constraintBottom_toBottomOf="@+id/text_view_imbd"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.4"
@@ -64,7 +64,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_view_imbd"
                 app:layout_constraintVertical_bias="0.0"
-                app:layout_constraintWidth_percent="0.6" />
+                app:layout_constraintWidth_percent="0.6"
+                app:rating="@{movieDetail.vote_average}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_8"
-                android:text="@{movie.popularity.toString()}"
+                android:text="@{movieDetail.popularity.toString()}"
                 app:layout_constraintBottom_toBottomOf="@+id/image_view_popularity"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -132,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_8"
-                android:text="@{movie.release_date}"
+                android:text="@{movieDetail.release_date}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

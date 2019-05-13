@@ -1,17 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.example.moviedb.screen.movied_edtail_fragment.MovieDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:clickable="true"
         android:focusable="true"
         tools:context=".screen.movied_edtail_fragment.MovieDetailFragment">
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_backdrop"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/dp_8"
+            app:cardCornerRadius="@dimen/dp_5"
+            app:layout_constraintBottom_toBottomOf="@+id/header_right_movie_detail_include"
+            app:layout_constraintDimensionRatio=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintWidth_percent="0.5">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:imageUrl="@{viewModel.movieDetail.poster_path}" />
+        </androidx.cardview.widget.CardView>
+
+        <include
+            android:id="@+id/header_right_movie_detail_include"
+            layout="@layout/header_right_movie_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/card_view_backdrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:movieDetail="@{viewModel.movieDetail}" />
+
+        <include
+            android:id="@+id/bottom_movie_detail_include"
+            layout="@layout/bottom_movie_detail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_right_movie_detail_include"
+            app:movieDetail="@{viewModel.movieDetail}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
