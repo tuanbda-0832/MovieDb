@@ -3,4 +3,10 @@
     <string name="home">Home</string>
     <string name="favorites">Favories</string>
     <string name="search">Search</string>
+    <string name="text_imbd">IMBD</string>
+    <string name="text_rating">%s/10</string>
+    <string name="text_popularity">Popularity</string>
+    <string name="text_release_date">Release date</string>
+    <string name="text_movie_name">%s</string>
+    <string name="text_minute">%s minute</string>
 </resources>
