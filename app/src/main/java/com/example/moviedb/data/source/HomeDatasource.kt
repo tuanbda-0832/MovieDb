@@ -1,6 +1,6 @@
 package com.example.moviedb.data.source
 
-import com.example.moviedb.data.model.Movie
+import com.example.moviedb.data.model.MovieDetail
 import com.example.moviedb.data.source.local.remote.response.PopularResponse
 import com.example.moviedb.data.source.remote.response.GenresReponse
 import io.reactivex.Single
@@ -14,6 +14,6 @@ interface HomeDatasource {
 
         fun getGenres(): Single<Response<GenresReponse>>
 
-        fun getMovieDetails(id: Int):Single<Response<Movie>>
+        fun getMovieDetails(id: Int):Single<Response<MovieDetail>>
     }
 }

@@ -72,6 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_8"
             android:layout_marginStart="@dimen/dp_8"
+            app:genresNames="@{movieDetail.genres}"
             app:layout_constraintBottom_toBottomOf="@+id/image_view_movie_genres"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

@@ -1,6 +1,7 @@
 package com.example.moviedb.data.source.remote.api
 
 import com.example.moviedb.data.model.Movie
+import com.example.moviedb.data.model.MovieDetail
 import com.example.moviedb.data.source.local.remote.response.PopularResponse
 import com.example.moviedb.data.source.remote.response.GenresReponse
 import io.reactivex.Single
@@ -14,7 +15,7 @@ interface AppApi {
     fun getPopularMovies(@Query("page") page: Int): Single<Response<PopularResponse>>
 
     @GET("movie/{id}")
-    fun getMovieDetails(@Path("id") id: Int): Single<Response<Movie>>
+    fun getMovieDetails(@Path("id") id: Int): Single<Response<MovieDetail>>
 
     @GET("genre/movie/list")
     fun getGenres(): Single<Response<GenresReponse>>

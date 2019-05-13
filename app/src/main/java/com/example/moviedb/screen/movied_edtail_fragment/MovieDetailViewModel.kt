@@ -2,7 +2,6 @@ package com.example.moviedb.screen.movied_edtail_fragment
 
 import androidx.lifecycle.MutableLiveData
 import com.example.moviedb.base.BaseViewModel
-import com.example.moviedb.data.model.Movie
 import com.example.moviedb.data.model.MovieDetail
 import com.example.moviedb.data.repository.HomeRepository
 import com.example.moviedb.data.source.local.remote.error.RetrofitException
@@ -21,7 +20,10 @@ class MovieDetailViewModel(val homeRepository: HomeRepository) : BaseViewModel()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { response, error ->
                     response?.let {
-                        //todo later
+                        when (it.isSuccessful) {
+                            true -> movieDetail.value = it.body()
+                            false -> onMessageError.value = RetrofitException.toHttpError(response).getMessageError()
+                        }
                     }
                     error?.let {
                         onMessageError.value = RetrofitException.toUnexpectedError(it).getMessageError()
