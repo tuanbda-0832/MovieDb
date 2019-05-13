@@ -42,7 +42,7 @@ class MovieDetailFragment : BaseFragment() {
     ): View? {
         _movieDetailFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.movie_detail_fragment, container, false)
-        _movieDetailFragmentBinding.setLifecycleOwner(this)
+        _movieDetailFragmentBinding.setLifecycleOwner(viewLifecycleOwner)
         return _movieDetailFragmentBinding.root
     }
 
