@@ -13,14 +13,17 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseFragment
-import com.example.moviedb.databinding.FavoriesFragmentBinding
 import com.example.moviedb.databinding.FragmentMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFragment : BaseFragment() {
+class MainFragment : BaseFragment<MainViewModel>() {
+
     companion object {
         fun newInstance() = MainFragment()
     }
+
+    override val viewModel: MainViewModel by viewModel()
 
     private lateinit var _mainBinding: FragmentMainBinding
 

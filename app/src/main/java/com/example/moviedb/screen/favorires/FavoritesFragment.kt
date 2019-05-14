@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseFragment
 import com.example.moviedb.databinding.FavoriesFragmentBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoritesFragment : BaseFragment() {
-
+class FavoritesFragment : BaseFragment<FavoritesViewModel>() {
     companion object {
         fun newInstance() = FavoritesFragment()
     }
+    override val viewModel: FavoritesViewModel by viewModel()
 
     private lateinit var _favoriesFragmentBinding: FavoriesFragmentBinding
 
