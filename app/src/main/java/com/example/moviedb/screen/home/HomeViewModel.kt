@@ -13,12 +13,12 @@ import io.reactivex.schedulers.Schedulers
 class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
 
     val movies: MutableLiveData<List<Movie>> = MutableLiveData()
+    val moviesLoadMore: MutableLiveData<List<Movie>> = MutableLiveData()
 
     val onMessageError = SingleLiveEvent<String>()
+    val onProgressBarEvent = SingleLiveEvent<Boolean>()
 
     val genres: MutableLiveData<List<Genre>> = MutableLiveData()
-
-
 
     fun getPopularMovies(page: Int = 1) {
         addDisposable(
@@ -28,7 +28,14 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .subscribe { response, error ->
                     response?.let {
                         when (it.isSuccessful) {
-                            true -> movies.value = response.body()?.movies
+                            true -> {
+                                if (page == 1) {
+                                    movies.value = it.body()?.movies ?: arrayListOf()
+                                } else {
+                                    moviesLoadMore.value = response.body()?.movies
+                                    onProgressBarEvent.value = false
+                                }
+                            }
                             false -> onMessageError.value = RetrofitException.toHttpError(response).getMessageError()
                         }
                     }
@@ -37,6 +44,15 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                     }
                 }
         )
+    }
+
+    fun onLoadMore(page: Int) {
+        onProgressBarEvent.value = true
+        getPopularMovies(page)
+    }
+
+    fun onRefresh() {
+        getPopularMovies()
     }
 
     fun getGenres() {
@@ -47,7 +63,7 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .subscribe { response, error ->
                     response?.let {
                         when (it.isSuccessful) {
-                            true -> genres.value = it.body()?.genres
+                            true -> genres.value = it.body()?.genres ?: arrayListOf()
                             false -> onMessageError.value = RetrofitException.toHttpError(response).getMessageError()
                         }
                     }
@@ -57,6 +73,4 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 }
         )
     }
-
-
 }

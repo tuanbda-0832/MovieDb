@@ -13,8 +13,10 @@ import com.example.moviedb.R
 import com.example.moviedb.base.BaseFragment
 import com.example.moviedb.databinding.HomeFragmentBinding
 import com.example.moviedb.screen.movied_edtail_fragment.MovieDetailFragment
+import com.example.moviedb.utils.EndlessRecyclerViewScrollListener
 import com.example.moviedb.utils.extensions.showToast
 import com.example.moviedb.utils.liveData.autoCleared
+import kotlinx.android.synthetic.main.home_fragment.recycler_view_home
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : BaseFragment() {
@@ -50,13 +52,7 @@ class HomeFragment : BaseFragment() {
         _homeAdapter = HomeAdapter {
             _onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
         }
-        _homeFragmentBinding.run {
-            recyclerViewHome.run {
-                adapter = _homeAdapter
-                layoutManager = GridLayoutManager(context, 2)
-                setHasFixedSize(true)
-            }
-        }
+        setUpRecyclerView()
     }
 
     override fun onDetach() {
@@ -67,8 +63,12 @@ class HomeFragment : BaseFragment() {
     override fun registerLiveData() {
         _homeViewModel.getPopularMovies()
         _homeViewModel.getGenres()
+
         _homeViewModel.movies.observe(viewLifecycleOwner, Observer {
             _homeAdapter.addData(it)
+        })
+        _homeViewModel.moviesLoadMore.observe(viewLifecycleOwner, Observer {
+            _homeAdapter.addLoadMoreData(it)
         })
         _homeViewModel.genres.observe(viewLifecycleOwner, Observer {
             _homeAdapter.addGenres(it)
@@ -78,6 +78,25 @@ class HomeFragment : BaseFragment() {
                 context?.showToast(it)
             }
         })
+        _homeViewModel.onProgressBarEvent.observe(viewLifecycleOwner, Observer {
+            _homeFragmentBinding.progressBar.visibility = when (it) {
+                true -> View.VISIBLE
+                else -> View.GONE
+            }
+        })
+    }
+
+    fun setUpRecyclerView() {
+        val layoutManager = GridLayoutManager(context, 2)
+        _homeFragmentBinding.recyclerViewHome.run {
+            adapter = _homeAdapter
+            this.layoutManager = layoutManager
+            addOnScrollListener(object : EndlessRecyclerViewScrollListener() {
+                override fun onLoadMore(page: Int) {
+                    _homeViewModel.onLoadMore(page)
+                }
+            })
+        }
     }
 
     interface OnNavigationListener {

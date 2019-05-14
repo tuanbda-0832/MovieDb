@@ -40,6 +40,11 @@ class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapte
         notifyDataSetChanged()
     }
 
+    fun addLoadMoreData(movies: List<Movie>) {
+        _movies.addAll(movies)
+        notifyItemRangeInserted(_movies.size - movies.size, _movies.size)
+    }
+
     fun addGenres(genres: List<Genre>) {
         _genres.run {
             clear()
