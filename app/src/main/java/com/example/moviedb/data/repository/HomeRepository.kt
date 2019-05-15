@@ -1,6 +1,5 @@
 package com.example.moviedb.data.repository
 
-import androidx.lifecycle.LiveData
 import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.data.model.MovieDetail
@@ -15,9 +14,7 @@ class HomeRepository(
     val homeLocalDataSource: HomeDatasource.Local
 ) : HomeDatasource.Remote, HomeDatasource.Local {
 
-    override fun insertMovie(movie: Movie) {
-        homeLocalDataSource.insertMovie(movie)
-    }
+    override fun insertMovie(movie: Movie): Single<Long> = homeLocalDataSource.insertMovie(movie)
 
     override fun getFavorieMovies(): Single<List<Movie>> = homeLocalDataSource.getFavorieMovies()
 

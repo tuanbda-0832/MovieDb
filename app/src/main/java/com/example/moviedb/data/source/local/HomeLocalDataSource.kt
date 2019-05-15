@@ -9,9 +9,7 @@ import io.reactivex.Single
 class HomeLocalDataSource(val appDatabase: AppDatabase) :
     HomeDatasource.Local {
 
-    override fun insertMovie(movie: Movie) {
-        appDatabase.movieDao().insertMovie(movie)
-    }
+    override fun insertMovie(movie: Movie): Single<Long> = appDatabase.movieDao().insertMovie(movie)
 
     override fun getFavorieMovies(): Single<List<Movie>> = appDatabase.movieDao().getAll()
 

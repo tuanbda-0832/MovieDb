@@ -10,7 +10,7 @@ import retrofit2.Response
 
 interface HomeDatasource {
     interface Local {
-        fun insertMovie(movie: Movie)
+        fun insertMovie(movie: Movie): Single<Long>
 
         fun getFavorieMovies(): Single<List<Movie>>
 
