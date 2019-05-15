@@ -1,9 +1,13 @@
 package com.example.moviedb.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity
 data class Movie(
     @SerializedName("vote_count") val vote_count: Int? = null,
+    @PrimaryKey
     @SerializedName("id") val id: Int,
     @SerializedName("video") val video: Boolean? = null,
     @SerializedName("vote_average") val vote_average: Double? = null,
