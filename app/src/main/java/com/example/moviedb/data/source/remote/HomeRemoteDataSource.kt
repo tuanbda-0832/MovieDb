@@ -2,7 +2,7 @@ package com.example.moviedb.data.source.remote
 
 import com.example.moviedb.data.model.MovieDetail
 import com.example.moviedb.data.source.HomeDatasource
-import com.example.moviedb.data.source.local.remote.response.PopularResponse
+import com.example.moviedb.data.source.remote.response.PopularResponse
 import com.example.moviedb.data.source.remote.api.AppApi
 import com.example.moviedb.data.source.remote.response.GenresReponse
 import io.reactivex.Single

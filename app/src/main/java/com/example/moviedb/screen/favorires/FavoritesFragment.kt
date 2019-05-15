@@ -1,30 +1,18 @@
 package com.example.moviedb.screen.favorires
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseFragment
 import com.example.moviedb.databinding.FavoriesFragmentBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoritesFragment : BaseFragment() {
-
+class FavoritesFragment : BaseFragment<FavoritesViewModel, FavoriesFragmentBinding>() {
     companion object {
         fun newInstance() = FavoritesFragment()
     }
 
-    private lateinit var _favoriesFragmentBinding: FavoriesFragmentBinding
+    override val viewModel: FavoritesViewModel by viewModel()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _favoriesFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.favories_fragment, container, false)
-        return _favoriesFragmentBinding.root
-    }
+    override fun getLayout(): Int = R.layout.favories_fragment
 
     override fun setUpView() {
     }

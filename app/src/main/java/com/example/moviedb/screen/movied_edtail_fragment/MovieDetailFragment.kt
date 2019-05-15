@@ -2,10 +2,6 @@ package com.example.moviedb.screen.movied_edtail_fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseFragment
@@ -13,7 +9,8 @@ import com.example.moviedb.databinding.MovieDetailFragmentBinding
 import com.example.moviedb.utils.extensions.showToast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MovieDetailFragment : BaseFragment() {
+class MovieDetailFragment : BaseFragment<MovieDetailViewModel, MovieDetailFragmentBinding>() {
+
     companion object {
         private const val ARG_ID = "ARG_ID"
         fun newInstance(id: Int): MovieDetailFragment = MovieDetailFragment().apply {
@@ -23,9 +20,7 @@ class MovieDetailFragment : BaseFragment() {
         }
     }
 
-    private lateinit var _movieDetailFragmentBinding: MovieDetailFragmentBinding
-
-    private val _movieDetailViewModel: MovieDetailViewModel by viewModel()
+    override val viewModel: MovieDetailViewModel by viewModel()
 
     private var _onActionBarListener: OnActionBarListener? = null
 
@@ -36,30 +31,17 @@ class MovieDetailFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _movieDetailFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.movie_detail_fragment, container, false)
-        _movieDetailFragmentBinding.setLifecycleOwner(viewLifecycleOwner)
-        return _movieDetailFragmentBinding.root
-    }
-
     override fun setUpView() {
         _onActionBarListener?.onSetUpActionBar(getString(R.string.text_movie_detail))
     }
 
-    override fun bindView() {
-        super.bindView()
-        _movieDetailFragmentBinding.viewModel = _movieDetailViewModel
-    }
+    override fun getLayout(): Int = R.layout.movie_detail_fragment
 
     override fun registerLiveData() {
         arguments?.let {
-            _movieDetailViewModel.getMovieDetails(it.getInt(ARG_ID))
+            viewModel.getMovieDetails(it.getInt(ARG_ID))
         }
-        _movieDetailViewModel.onMessageError.observe(viewLifecycleOwner, Observer {
+        viewModel.onMessageError.observe(viewLifecycleOwner, Observer {
             it?.let {
                 context?.showToast(it)
             }
