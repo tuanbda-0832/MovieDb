@@ -1,6 +1,7 @@
 package com.example.moviedb.screen.home
 
 import android.content.Context
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,9 +36,9 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
     override fun getLayout(): Int = R.layout.home_fragment
 
     override fun setUpView() {
-        _homeAdapter = HomeAdapter {
+        _homeAdapter = HomeAdapter({
             _onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
-        }
+        }, {})
         setUpRecyclerView()
     }
 
@@ -48,7 +49,7 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
 
     override fun registerLiveData() {
         viewModel.getPopularMovies()
-        viewModel.getGenres()
+        viewModel.getGenresLocal()
 
         viewModel.movies.observe(viewLifecycleOwner, Observer {
             _homeAdapter.addData(it)

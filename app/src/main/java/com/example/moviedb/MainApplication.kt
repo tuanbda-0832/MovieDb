@@ -1,6 +1,7 @@
 package com.example.moviedb
 
 import android.app.Application
+import com.example.moviedb.utils.di.localModule
 import com.example.moviedb.utils.di.networkModule
 import com.example.moviedb.utils.di.repositoryModule
 import com.example.moviedb.utils.di.viewModelModule
@@ -15,7 +16,8 @@ class MainApplication : Application() {
             arrayListOf(
                 viewModelModule,
                 networkModule,
-                repositoryModule
+                repositoryModule,
+                localModule
             )
         )
     }

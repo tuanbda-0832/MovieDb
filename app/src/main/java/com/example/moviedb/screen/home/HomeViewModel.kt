@@ -55,7 +55,7 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
         getPopularMovies()
     }
 
-    fun getGenres() {
+    fun getGenresRemote() {
         addDisposable(
             homeRepository.getGenres()
                 .subscribeOn(Schedulers.io())
@@ -63,13 +63,38 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .subscribe { response, error ->
                     response?.let {
                         when (it.isSuccessful) {
-                            true -> genres.value = it.body()?.genres ?: arrayListOf()
+                            true -> {
+                                val genres = it.body()?.genres ?: arrayListOf()
+                                this@HomeViewModel.genres.value = genres
+                                insertGenres(genres)
+                            }
                             false -> onMessageError.value = RetrofitException.toHttpError(response).getMessageError()
                         }
                     }
                     error?.let {
                         onMessageError.value = RetrofitException.toUnexpectedError(it).getMessageError()
                     }
+                }
+        )
+    }
+
+    fun insertGenres(genres: List<Genre>) {
+        addDisposable(
+            homeRepository.insertGenres(genres)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { ids, error -> onMessageError.value = error.localizedMessage }
+        )
+    }
+
+    fun getGenresLocal() {
+        addDisposable(
+            homeRepository.getGenresLocal()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { genres, error ->
+                    if (genres.isEmpty() || error != null) getGenresRemote()
+                    else this@HomeViewModel.genres.value = genres
                 }
         )
     }

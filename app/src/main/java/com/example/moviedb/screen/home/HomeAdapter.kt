@@ -1,6 +1,8 @@
 package com.example.moviedb.screen.home
 
 import android.view.LayoutInflater
+import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
@@ -10,7 +12,11 @@ import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.ItemHomeBinding
 
-class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class HomeAdapter(
+    val onItemClick: (movie: Movie) -> Unit,
+    val onFavoriesClick: (movie: Movie) -> Unit
+) :
+    RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
     private var _movies = mutableListOf<Movie>()
 
@@ -23,7 +29,7 @@ class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapte
             parent,
             false
         )
-        return ViewHolder(homeAdapterBinding, _genres, onItemClick)
+        return ViewHolder(homeAdapterBinding, _genres, onItemClick, onFavoriesClick)
     }
 
     override fun getItemCount(): Int = _movies.size
@@ -55,13 +61,17 @@ class HomeAdapter(val onItemClick: (movie: Movie) -> Unit) : RecyclerView.Adapte
     class ViewHolder(
         val itemHomeBinding: ItemHomeBinding,
         val genres: List<Genre>,
-        onItemClick: (movie: Movie) -> Unit
+        onItemClick: (movie: Movie) -> Unit,
+        onFavoriesClick: (movie: Movie) -> Unit
     ) :
         RecyclerView.ViewHolder(itemHomeBinding.root) {
 
         init {
             itemHomeBinding.cardView.setOnClickListener {
                 itemHomeBinding.movie?.let(onItemClick)
+            }
+            itemHomeBinding.imageViewFavories.setOnClickListener {
+                itemHomeBinding.movie?.let(onFavoriesClick)
             }
         }
 
