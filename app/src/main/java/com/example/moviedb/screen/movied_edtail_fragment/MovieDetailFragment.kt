@@ -9,7 +9,7 @@ import com.example.moviedb.databinding.MovieDetailFragmentBinding
 import com.example.moviedb.utils.extensions.showToast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
+class MovieDetailFragment : BaseFragment<MovieDetailViewModel, MovieDetailFragmentBinding>() {
 
     companion object {
         private const val ARG_ID = "ARG_ID"
@@ -22,8 +22,6 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
     override val viewModel: MovieDetailViewModel by viewModel()
 
-    private var _movieDetailFragmentBinding: MovieDetailFragmentBinding? = null
-
     private var _onActionBarListener: OnActionBarListener? = null
 
     override fun onAttach(context: Context) {
@@ -34,16 +32,10 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
     }
 
     override fun setUpView() {
-        _movieDetailFragmentBinding = binding as MovieDetailFragmentBinding
         _onActionBarListener?.onSetUpActionBar(getString(R.string.text_movie_detail))
     }
 
     override fun getLayout(): Int = R.layout.movie_detail_fragment
-
-    override fun bindView() {
-        super.bindView()
-        _movieDetailFragmentBinding?.viewModel = viewModel
-    }
 
     override fun registerLiveData() {
         arguments?.let {

@@ -17,7 +17,7 @@ import com.example.moviedb.databinding.FragmentMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFragment : BaseFragment<MainViewModel>() {
+class MainFragment : BaseFragment<MainViewModel, FragmentMainBinding>() {
 
     companion object {
         fun newInstance() = MainFragment()
@@ -25,22 +25,16 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     override val viewModel: MainViewModel by viewModel()
 
-    private lateinit var _mainBinding: FragmentMainBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _mainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
-        return _mainBinding.root
-    }
+    override fun getLayout(): Int = R.layout.fragment_main
 
     override fun setUpView() {
         val host: NavHostFragment? =
             childFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment?
         val navController = host?.navController
         navController?.let {
-            setupBottomNavMenu(_mainBinding.root, navController)
+            binding?.let {
+                setupBottomNavMenu(it.root, navController)
+            }
         }
     }
 

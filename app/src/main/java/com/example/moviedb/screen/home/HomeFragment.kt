@@ -13,13 +13,11 @@ import com.example.moviedb.utils.extensions.showToast
 import com.example.moviedb.utils.liveData.autoCleared
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class HomeFragment : BaseFragment<HomeViewModel>() {
+class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
 
     companion object {
         fun newInstance() = HomeFragment()
     }
-
-    private var _homeFragmentBinding: HomeFragmentBinding? = null
 
     override val viewModel: HomeViewModel by sharedViewModel()
 
@@ -37,7 +35,6 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
     override fun getLayout(): Int = R.layout.home_fragment
 
     override fun setUpView() {
-        _homeFragmentBinding = binding as HomeFragmentBinding?
         _homeAdapter = HomeAdapter {
             _onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
         }
@@ -71,7 +68,7 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
 
     fun setUpRecyclerView() {
         val layoutManager = GridLayoutManager(context, 2)
-        _homeFragmentBinding?.let {
+        binding?.let {
             it.recyclerViewHome.run {
                 adapter = _homeAdapter
                 this.layoutManager = layoutManager

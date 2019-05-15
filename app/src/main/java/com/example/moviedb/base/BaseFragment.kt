@@ -9,9 +9,9 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.example.moviedb.BR
 
-abstract class BaseFragment<T : BaseViewModel> : Fragment() {
+abstract class BaseFragment<T : BaseViewModel, D : ViewDataBinding> : Fragment() {
 
-    var binding: ViewDataBinding? = null
+    var binding: D? = null
 
     abstract val viewModel: T
 
@@ -33,9 +33,7 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment() {
         bindView()
     }
 
-    open protected fun getLayout(): Int {
-        return 0
-    }
+    protected abstract fun getLayout(): Int
 
     protected abstract fun setUpView()
 
