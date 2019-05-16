@@ -28,7 +28,7 @@ class HomeAdapter(
         }
     }
 
-    override fun addOnClickListener(binding: ItemHomeBinding) {
+    override fun init(binding: ItemHomeBinding) {
         binding.cardView.setOnClickListener { binding.item?.let(onItemClick) }
         binding.imageViewFavories.setOnClickListener { binding.item?.let(onFavoriesClick) }
     }

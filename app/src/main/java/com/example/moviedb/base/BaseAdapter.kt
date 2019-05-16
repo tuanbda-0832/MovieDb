@@ -16,13 +16,12 @@ open class BaseAdapter<T, D : ViewDataBinding>(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate<D>(
             layoutInflater, viewType, parent, false
-        ).apply {
-            addOnClickListener(this)
-        }
+        )
+        init(binding)
         return BaseViewHolder(binding)
     }
 
-    open fun addOnClickListener(binding: D) {
+    open fun init(binding: D) {
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) = holder.bind(getItem(position))

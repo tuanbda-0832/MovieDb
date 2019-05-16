@@ -29,7 +29,7 @@ class FavoritesAdapter(
         }
     }
 
-    override fun addOnClickListener(binding: ItemFavoriteBinding) {
+    override fun init(binding: ItemFavoriteBinding) {
         binding.cardView.setOnClickListener { binding.item?.let(onItemClick) }
         binding.imageViewFavories.setOnClickListener { binding.item?.let(onUnFavoriesClick) }
     }
