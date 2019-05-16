@@ -1,13 +1,12 @@
 package com.example.moviedb.screen.home
 
 import android.view.LayoutInflater
-import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
+import com.example.moviedb.base.BaseAdapter
 import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.ItemHomeBinding
@@ -15,12 +14,7 @@ import com.example.moviedb.databinding.ItemHomeBinding
 class HomeAdapter(
     val onItemClick: (movie: Movie) -> Unit,
     val onFavoriesClick: (movie: Movie) -> Unit
-) :
-    RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
-
-    private var _movies = mutableListOf<Movie>()
-
-    private var _genres = mutableListOf<Genre>()
+) : BaseAdapter<ItemHomeBinding>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val homeAdapterBinding = DataBindingUtil.inflate<ItemHomeBinding>(
@@ -29,42 +23,16 @@ class HomeAdapter(
             parent,
             false
         )
-        return ViewHolder(homeAdapterBinding, _genres, onItemClick, onFavoriesClick)
-    }
-
-    override fun getItemCount(): Int = _movies.size
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(_movies.get(position))
-    }
-
-    fun addData(movies: List<Movie>) {
-        _movies.run {
-            clear()
-            addAll(movies)
-        }
-        notifyDataSetChanged()
-    }
-
-    fun addLoadMoreData(movies: List<Movie>) {
-        _movies.addAll(movies)
-        notifyItemRangeInserted(_movies.size - movies.size, _movies.size)
-    }
-
-    fun addGenres(genres: List<Genre>) {
-        _genres.run {
-            clear()
-            addAll(genres)
-        }
+        return ViewHolder(homeAdapterBinding, genres, onItemClick, onFavoriesClick)
     }
 
     class ViewHolder(
-        val itemHomeBinding: ItemHomeBinding,
-        val genres: List<Genre>,
+        itemHomeBinding: ItemHomeBinding,
+        genres: List<Genre>,
         onItemClick: (movie: Movie) -> Unit,
         onFavoriesClick: (movie: Movie) -> Unit
     ) :
-        RecyclerView.ViewHolder(itemHomeBinding.root) {
+        BaseAdapter.ViewHolder<ItemHomeBinding>(itemHomeBinding, genres) {
 
         init {
             itemHomeBinding.cardView.setOnClickListener {
@@ -75,24 +43,11 @@ class HomeAdapter(
             }
         }
 
-        fun bind(movie: Movie) {
-            itemHomeBinding.movie = movie
+        override fun bind(movie: Movie) {
+            binding.movie = movie
             movie.genre_ids?.let {
-                setGenres(itemHomeBinding.textViewMovieGenres, it, genres)
+                setGenres(binding.textViewMovieGenres, it, genres)
             }
-        }
-
-        fun setGenres(view: TextView, genresIds: List<Int>, genres: List<Genre>) {
-            val builder = StringBuilder()
-            genresIds.forEach {
-                for (genre in genres) {
-                    if (genre.id == it) {
-                        builder.append("${genre.name}, ")
-                        break
-                    }
-                }
-            }
-            view.text = builder.toString()
         }
     }
 }

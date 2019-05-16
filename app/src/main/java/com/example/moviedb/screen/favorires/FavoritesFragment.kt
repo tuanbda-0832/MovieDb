@@ -36,7 +36,6 @@ class FavoritesFragment : BaseFragment<FavoritesViewModel, FavoriesFragmentBindi
             onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
         }, {
             viewModel.unFavoriteMovie(it)
-            favoritesAdapter.deleteMovie(it)
         })
         setUpRecyclerView()
     }
@@ -48,8 +47,8 @@ class FavoritesFragment : BaseFragment<FavoritesViewModel, FavoriesFragmentBindi
 
     override fun bindView() {
         super.bindView()
-        viewModel.getFavoriteMovies()
         viewModel.getGenresLocal()
+        viewModel.getFavoriteMovies()
     }
 
     override fun registerLiveData() {
@@ -58,6 +57,16 @@ class FavoritesFragment : BaseFragment<FavoritesViewModel, FavoriesFragmentBindi
         })
         viewModel.movies.observe(viewLifecycleOwner, Observer {
             favoritesAdapter.addData(it)
+        })
+
+        viewModel.genres.observe(viewLifecycleOwner, Observer {
+            favoritesAdapter.addGenres(it)
+        })
+
+        viewModel.onDeleteMovieEvent.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                favoritesAdapter.deleteMovie(it)
+            }
         })
     }
 

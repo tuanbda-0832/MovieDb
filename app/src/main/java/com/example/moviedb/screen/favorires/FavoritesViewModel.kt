@@ -16,6 +16,8 @@ class FavoritesViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
 
     val onMessageError = SingleLiveEvent<String>()
 
+    val onDeleteMovieEvent = SingleLiveEvent<Movie>()
+
     fun getFavoriteMovies() {
         addDisposable(
             homeRepository.getFavorieMovies()
@@ -47,8 +49,9 @@ class FavoritesViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe { genres, error ->
-                    error?.let {
-                        onMessageError.value = it.localizedMessage
+                    when (error) {
+                        null -> onDeleteMovieEvent.value = movie
+                        else -> onMessageError.value = error.localizedMessage
                     }
                 }
         )
