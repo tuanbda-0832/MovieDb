@@ -1,5 +1,6 @@
 package com.example.moviedb.screen.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.moviedb.base.BaseViewModel
 import com.example.moviedb.data.model.Genre
@@ -12,15 +13,22 @@ import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
 
-    val movies: MutableLiveData<List<Movie>> = MutableLiveData()
-    val moviesLoadMore: MutableLiveData<List<Movie>> = MutableLiveData()
+    val onProgessBarRecyclerView = SingleLiveEvent<Boolean>()
+
+    val movies: MutableLiveData<MutableList<Movie>> = MutableLiveData()
 
     val onMessageError = SingleLiveEvent<String>()
+
+    val onMessageSuccess = SingleLiveEvent<Boolean>()
+
     val onProgressBarEvent = SingleLiveEvent<Boolean>()
 
     val genres: MutableLiveData<List<Genre>> = MutableLiveData()
 
     fun getPopularMovies(page: Int = 1) {
+        if (page == 1) {
+            onProgessBarRecyclerView.value = true
+        }
         addDisposable(
             homeRepository.getPopularMovies(page)
                 .subscribeOn(Schedulers.io())
@@ -31,8 +39,15 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                             true -> {
                                 if (page == 1) {
                                     movies.value = it.body()?.movies ?: arrayListOf()
+                                    onProgessBarRecyclerView.value = false
                                 } else {
-                                    moviesLoadMore.value = response.body()?.movies
+                                    val oldMovies = this.movies.value ?: arrayListOf()
+                                    val newMovies = response.body()?.movies ?: arrayListOf()
+                                    val movies = mutableListOf<Movie>().apply {
+                                        addAll(oldMovies)
+                                        addAll(newMovies)
+                                    }
+                                    this.movies.value = movies
                                     onProgressBarEvent.value = false
                                 }
                             }
@@ -83,7 +98,9 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
             homeRepository.insertGenres(genres)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe { ids, error -> onMessageError.value = error.localizedMessage }
+                .subscribe { ids, error ->
+                    onMessageError.value = error.localizedMessage
+                }
         )
     }
 
@@ -95,6 +112,21 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .subscribe { genres, error ->
                     if (genres.isEmpty() || error != null) getGenresRemote()
                     else this@HomeViewModel.genres.value = genres
+                }
+        )
+    }
+
+    fun addFavorite(movie: Movie) {
+        addDisposable(
+            homeRepository.insertMovie(movie)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { row, error ->
+                    if (error == null) onMessageSuccess.value = true else {
+                        onMessageError.value =
+                            error.localizedMessage
+                        error.printStackTrace()
+                    }
                 }
         )
     }

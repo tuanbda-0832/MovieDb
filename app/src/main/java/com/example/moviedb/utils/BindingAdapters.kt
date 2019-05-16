@@ -1,6 +1,8 @@
 package com.example.moviedb.utils
 
 import android.view.View
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
@@ -14,7 +16,7 @@ object BindingAdapters {
     @BindingAdapter("imageUrl")
     @JvmStatic
     fun ImageView.loadImage(backdropPath: String?) {
-        val cropOptions = RequestOptions().centerCrop()
+        val cropOptions = RequestOptions().centerCrop().placeholder(ColorDrawable(Color.GRAY))
         val builder = StringBuilder(Constant.BASE_URL_IMG)
         Glide.with(this.context)
             .applyDefaultRequestOptions(cropOptions)

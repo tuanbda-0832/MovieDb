@@ -7,5 +7,5 @@ data class PopularResponse(
     @SerializedName("page") val page: Int? = null,
     @SerializedName("total_results") val total_results: Int? = null,
     @SerializedName("total_pages") val total_pages: Int? = null,
-    @SerializedName("results") val movies: List<Movie>? = null
+    @SerializedName("results") val movies: MutableList<Movie>? = null
 )
