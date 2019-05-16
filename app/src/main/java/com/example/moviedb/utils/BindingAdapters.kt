@@ -1,6 +1,8 @@
 package com.example.moviedb.utils
 
 import android.view.View
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView

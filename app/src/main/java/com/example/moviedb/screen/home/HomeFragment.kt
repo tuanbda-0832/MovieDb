@@ -1,7 +1,6 @@
 package com.example.moviedb.screen.home
 
 import android.content.Context
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -36,10 +35,22 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
     override fun getLayout(): Int = R.layout.home_fragment
 
     override fun setUpView() {
+        binding?.run {
+            viewModel = this.viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
         _homeAdapter = HomeAdapter({
             _onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
-        }, {})
+        }, {
+            viewModel.addFavorite(it)
+        })
         setUpRecyclerView()
+        binding?.swipeRefreshLayout?.run {
+            setOnRefreshListener {
+                viewModel.onRefresh()
+                isRefreshing = false
+            }
+        }
     }
 
     override fun onDetach() {
@@ -52,10 +63,7 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
         viewModel.getGenresLocal()
 
         viewModel.movies.observe(viewLifecycleOwner, Observer {
-            _homeAdapter.addData(it)
-        })
-        viewModel.moviesLoadMore.observe(viewLifecycleOwner, Observer {
-            _homeAdapter.addLoadMoreData(it)
+            _homeAdapter.submitList(it)
         })
         viewModel.genres.observe(viewLifecycleOwner, Observer {
             _homeAdapter.addGenres(it)
@@ -63,6 +71,11 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
         viewModel.onMessageError.observe(viewLifecycleOwner, Observer {
             it?.let {
                 context?.showToast(it)
+            }
+        })
+        viewModel.onMessageSuccess.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                context?.showToast(getString(R.string.msg_add_favorite_success))
             }
         })
     }
