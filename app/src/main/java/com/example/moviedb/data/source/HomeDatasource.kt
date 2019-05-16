@@ -17,6 +17,8 @@ interface HomeDatasource {
         fun insertGenres(genes: List<Genre>): Single<List<Long>>
 
         fun getGenresLocal(): Single<List<Genre>>
+
+        fun deleteMovie(movie: Movie): Single<Int>
     }
 
     interface Remote {

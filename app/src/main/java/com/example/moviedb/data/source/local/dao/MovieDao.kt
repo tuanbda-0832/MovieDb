@@ -3,6 +3,7 @@ package com.example.moviedb.data.source.local.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.moviedb.data.model.Movie
@@ -14,7 +15,7 @@ interface MovieDao {
     @Query("SELECT * FROM movie")
     fun getAll(): Single<List<Movie>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertMovie(movie: Movie): Single<Long>
 
     @Update

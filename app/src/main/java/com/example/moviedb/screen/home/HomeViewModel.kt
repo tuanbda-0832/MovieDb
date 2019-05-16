@@ -1,6 +1,7 @@
 package com.example.moviedb.screen.home
 
 import androidx.lifecycle.MutableLiveData
+import com.example.moviedb.R.string
 import com.example.moviedb.base.BaseViewModel
 import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
@@ -13,9 +14,13 @@ import io.reactivex.schedulers.Schedulers
 class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
 
     val movies: MutableLiveData<List<Movie>> = MutableLiveData()
+
     val moviesLoadMore: MutableLiveData<List<Movie>> = MutableLiveData()
 
     val onMessageError = SingleLiveEvent<String>()
+
+    val onMessageSuccess = SingleLiveEvent<Boolean>()
+
     val onProgressBarEvent = SingleLiveEvent<Boolean>()
 
     val genres: MutableLiveData<List<Genre>> = MutableLiveData()
@@ -95,6 +100,18 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .subscribe { genres, error ->
                     if (genres.isEmpty() || error != null) getGenresRemote()
                     else this@HomeViewModel.genres.value = genres
+                }
+        )
+    }
+
+    fun addFavorite(movie: Movie) {
+        addDisposable(
+            homeRepository.insertMovie(movie)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { row, error ->
+                    if (error == null) onMessageSuccess.value = true else onMessageError.value =
+                        error.localizedMessage
                 }
         )
     }

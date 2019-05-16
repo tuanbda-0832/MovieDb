@@ -14,6 +14,8 @@ class HomeRepository(
     val homeLocalDataSource: HomeDatasource.Local
 ) : HomeDatasource.Remote, HomeDatasource.Local {
 
+    override fun deleteMovie(movie: Movie): Single<Int> = homeLocalDataSource.deleteMovie(movie)
+
     override fun insertMovie(movie: Movie): Single<Long> = homeLocalDataSource.insertMovie(movie)
 
     override fun getFavorieMovies(): Single<List<Movie>> = homeLocalDataSource.getFavorieMovies()

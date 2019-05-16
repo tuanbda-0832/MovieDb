@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_8"
-                android:src="@drawable/ic_favorite"
+                android:src="@drawable/ic_delete_forever"
                 app:layout_constraintBottom_toBottomOf="@+id/text_view_movie_genres"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/text_view_movie_genres" />
