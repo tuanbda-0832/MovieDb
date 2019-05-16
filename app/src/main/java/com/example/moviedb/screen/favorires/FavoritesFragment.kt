@@ -32,11 +32,10 @@ class FavoritesFragment : BaseFragment<FavoritesViewModel, FavoriesFragmentBindi
     }
 
     override fun setUpView() {
-        favoritesAdapter = FavoritesAdapter({
-            onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
-        }, {
-            viewModel.unFavoriteMovie(it)
-        })
+        favoritesAdapter = FavoritesAdapter(
+            { onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id)) }, {
+                viewModel.unFavoriteMovie(it)
+            })
         setUpRecyclerView()
     }
 
@@ -56,17 +55,11 @@ class FavoritesFragment : BaseFragment<FavoritesViewModel, FavoriesFragmentBindi
 
         })
         viewModel.movies.observe(viewLifecycleOwner, Observer {
-            favoritesAdapter.addData(it)
+            favoritesAdapter.submitList(it)
         })
 
         viewModel.genres.observe(viewLifecycleOwner, Observer {
             favoritesAdapter.addGenres(it)
-        })
-
-        viewModel.onDeleteMovieEvent.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                favoritesAdapter.deleteMovie(it)
-            }
         })
     }
 

@@ -18,7 +18,7 @@ class HomeRepository(
 
     override fun insertMovie(movie: Movie): Single<Long> = homeLocalDataSource.insertMovie(movie)
 
-    override fun getFavorieMovies(): Single<List<Movie>> = homeLocalDataSource.getFavorieMovies()
+    override fun getFavorieMovies(): Single<MutableList<Movie>> = homeLocalDataSource.getFavorieMovies()
 
     override fun insertGenres(genes: List<Genre>): Single<List<Long>> = homeLocalDataSource.insertGenres(genes)
 

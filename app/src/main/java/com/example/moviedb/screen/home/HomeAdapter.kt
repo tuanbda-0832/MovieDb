@@ -1,53 +1,42 @@
 package com.example.moviedb.screen.home
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseAdapter
+import com.example.moviedb.base.BaseViewHolder
 import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.ItemHomeBinding
+import com.example.moviedb.utils.extensions.setGenres
 
 class HomeAdapter(
     val onItemClick: (movie: Movie) -> Unit,
     val onFavoriesClick: (movie: Movie) -> Unit
-) : BaseAdapter<ItemHomeBinding>() {
+) :
+    BaseAdapter<Movie, ItemHomeBinding>(DiffCallBackMovie()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val homeAdapterBinding = DataBindingUtil.inflate<ItemHomeBinding>(
-            LayoutInflater.from(parent.context),
-            R.layout.item_home,
-            parent,
-            false
-        )
-        return ViewHolder(homeAdapterBinding, genres, onItemClick, onFavoriesClick)
-    }
+    private var genres = mutableListOf<Genre>()
 
-    class ViewHolder(
-        itemHomeBinding: ItemHomeBinding,
-        genres: List<Genre>,
-        onItemClick: (movie: Movie) -> Unit,
-        onFavoriesClick: (movie: Movie) -> Unit
-    ) :
-        BaseAdapter.ViewHolder<ItemHomeBinding>(itemHomeBinding, genres) {
+    override fun getItemViewType(position: Int): Int = R.layout.item_home
 
-        init {
-            itemHomeBinding.cardView.setOnClickListener {
-                itemHomeBinding.movie?.let(onItemClick)
-            }
-            itemHomeBinding.imageViewFavories.setOnClickListener {
-                itemHomeBinding.movie?.let(onFavoriesClick)
+    override fun onBindViewHolder(holder: BaseViewHolder<Movie>, position: Int) {
+        super.onBindViewHolder(holder, position)
+        val binding = holder.viewDataBinding as ItemHomeBinding
+        binding.item?.let {
+            it.genre_ids?.let {
+                binding.textViewMovieGenres.setGenres(it, genres)
             }
         }
+    }
 
-        override fun bind(movie: Movie) {
-            binding.movie = movie
-            movie.genre_ids?.let {
-                setGenres(binding.textViewMovieGenres, it, genres)
-            }
+    override fun addOnClickListener(binding: ItemHomeBinding) {
+        binding.cardView.setOnClickListener { binding.item?.let(onItemClick) }
+        binding.imageViewFavories.setOnClickListener { binding.item?.let(onFavoriesClick) }
+    }
+
+    fun addGenres(genres: List<Genre>) {
+        this.genres.run {
+            clear()
+            addAll(genres)
         }
     }
 }

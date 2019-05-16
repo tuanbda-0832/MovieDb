@@ -12,11 +12,9 @@ import io.reactivex.schedulers.Schedulers
 class FavoritesViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
     val genres: MutableLiveData<List<Genre>> = MutableLiveData()
 
-    val movies: MutableLiveData<List<Movie>> = MutableLiveData()
+    val movies: MutableLiveData<MutableList<Movie>> = MutableLiveData()
 
     val onMessageError = SingleLiveEvent<String>()
-
-    val onDeleteMovieEvent = SingleLiveEvent<Movie>()
 
     fun getFavoriteMovies() {
         addDisposable(
@@ -50,7 +48,14 @@ class FavoritesViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .subscribe { genres, error ->
                     when (error) {
-                        null -> onDeleteMovieEvent.value = movie
+                        null -> {
+                            val oldMovies = movies.value ?: arrayListOf()
+                            val movies = mutableListOf<Movie>().apply {
+                                addAll(oldMovies)
+                                remove(movie)
+                            }
+                            this.movies.value = movies
+                        }
                         else -> onMessageError.value = error.localizedMessage
                     }
                 }

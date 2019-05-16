@@ -13,7 +13,7 @@ import io.reactivex.Single
 interface MovieDao {
 
     @Query("SELECT * FROM movie")
-    fun getAll(): Single<List<Movie>>
+    fun getAll(): Single<MutableList<Movie>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertMovie(movie: Movie): Single<Long>

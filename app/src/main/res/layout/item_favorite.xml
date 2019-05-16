@@ -5,7 +5,7 @@
     <data>
 
         <variable
-            name="movie"
+            name="item"
             type="com.example.moviedb.data.model.Movie" />
     </data>
 
@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:src="@drawable/noimagefound"
-                app:imageUrl="@{movie.backdrop_path}"
+                app:imageUrl="@{item.backdrop_path}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent="0.7"
@@ -40,7 +40,7 @@
                 android:layout_margin="@dimen/dp_8"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{movie.original_title}"
+                android:text="@{item.original_title}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

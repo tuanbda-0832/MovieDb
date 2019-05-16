@@ -35,6 +35,10 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
     override fun getLayout(): Int = R.layout.home_fragment
 
     override fun setUpView() {
+        binding?.run {
+            viewModel = this.viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
         _homeAdapter = HomeAdapter({
             _onNavigationListener?.navigateToFragment(MovieDetailFragment.newInstance(it.id))
         }, {
@@ -59,10 +63,7 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
         viewModel.getGenresLocal()
 
         viewModel.movies.observe(viewLifecycleOwner, Observer {
-            _homeAdapter.addData(it)
-        })
-        viewModel.moviesLoadMore.observe(viewLifecycleOwner, Observer {
-            _homeAdapter.addLoadMoreData(it)
+            _homeAdapter.submitList(it)
         })
         viewModel.genres.observe(viewLifecycleOwner, Observer {
             _homeAdapter.addGenres(it)

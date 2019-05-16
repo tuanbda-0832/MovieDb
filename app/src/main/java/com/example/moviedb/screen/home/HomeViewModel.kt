@@ -1,7 +1,6 @@
 package com.example.moviedb.screen.home
 
 import androidx.lifecycle.MutableLiveData
-import com.example.moviedb.R.string
 import com.example.moviedb.base.BaseViewModel
 import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
@@ -13,9 +12,7 @@ import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
 
-    val movies: MutableLiveData<List<Movie>> = MutableLiveData()
-
-    val moviesLoadMore: MutableLiveData<List<Movie>> = MutableLiveData()
+    val movies: MutableLiveData<MutableList<Movie>> = MutableLiveData()
 
     val onMessageError = SingleLiveEvent<String>()
 
@@ -37,7 +34,13 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                                 if (page == 1) {
                                     movies.value = it.body()?.movies ?: arrayListOf()
                                 } else {
-                                    moviesLoadMore.value = response.body()?.movies
+                                    val oldMovies = this.movies.value ?: arrayListOf()
+                                    val newMovies = response.body()?.movies ?: arrayListOf()
+                                    val movies = mutableListOf<Movie>().apply {
+                                        addAll(oldMovies)
+                                        addAll(newMovies)
+                                    }
+                                    this.movies.value = movies
                                     onProgressBarEvent.value = false
                                 }
                             }

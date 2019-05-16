@@ -12,7 +12,7 @@ interface HomeDatasource {
     interface Local {
         fun insertMovie(movie: Movie): Single<Long>
 
-        fun getFavorieMovies(): Single<List<Movie>>
+        fun getFavorieMovies(): Single<MutableList<Movie>>
 
         fun insertGenres(genes: List<Genre>): Single<List<Long>>
 
