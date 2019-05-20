@@ -55,7 +55,6 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
     }
 
     override fun registerLiveData() {
-        viewModel.getPopularMovies()
         viewModel.getGenresLocal()
 
         viewModel.movies.observe(viewLifecycleOwner, Observer {
@@ -63,6 +62,7 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
         })
         viewModel.genres.observe(viewLifecycleOwner, Observer {
             _homeAdapter.addGenres(it)
+            viewModel.getFavoriteMovies()
         })
         viewModel.onMessageError.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -72,7 +72,13 @@ class HomeFragment : BaseFragment<HomeViewModel, HomeFragmentBinding>() {
         viewModel.onMessageSuccess.observe(viewLifecycleOwner, Observer {
             if (it) {
                 context?.showToast(getString(R.string.msg_add_favorite_success))
+            } else {
+                context?.showToast(getString(R.string.msg_add_error))
             }
+        })
+
+        viewModel.moviesLocal.observe(viewLifecycleOwner, Observer {
+            viewModel.getPopularMovies()
         })
     }
 

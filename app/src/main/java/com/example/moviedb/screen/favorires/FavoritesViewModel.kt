@@ -24,7 +24,7 @@ class FavoritesViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .subscribe { movies, error ->
                     this@FavoritesViewModel.movies.value = movies
                     error?.let {
-                        movies
+                        onMessageError.value = error.localizedMessage
                     }
                 }
         )

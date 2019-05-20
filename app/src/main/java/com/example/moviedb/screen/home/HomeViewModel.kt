@@ -1,6 +1,5 @@
 package com.example.moviedb.screen.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.moviedb.base.BaseViewModel
 import com.example.moviedb.data.model.Genre
@@ -17,6 +16,8 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
 
     val movies: MutableLiveData<MutableList<Movie>> = MutableLiveData()
 
+    val moviesLocal: MutableLiveData<MutableList<Movie>> = MutableLiveData()
+
     val onMessageError = SingleLiveEvent<String>()
 
     val onMessageSuccess = SingleLiveEvent<Boolean>()
@@ -25,8 +26,8 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
 
     val genres: MutableLiveData<List<Genre>> = MutableLiveData()
 
-    fun getPopularMovies(page: Int = 1) {
-        if (page == 1) {
+    fun getPopularMovies(page: Int = 1, isRefresh: Boolean = false) {
+        if (page == 1 && !isRefresh) {
             onProgessBarRecyclerView.value = true
         }
         addDisposable(
@@ -34,22 +35,30 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { response, error ->
+                    onProgessBarRecyclerView.value = false
+                    onProgressBarEvent.value = false
                     response?.let {
                         when (it.isSuccessful) {
                             true -> {
+                                val local = moviesLocal.value ?: mutableListOf()
+                                val remote: MutableList<Movie>
                                 if (page == 1) {
-                                    movies.value = it.body()?.movies ?: arrayListOf()
-                                    onProgessBarRecyclerView.value = false
+                                    remote = it.body()?.movies ?: mutableListOf()
                                 } else {
-                                    val oldMovies = this.movies.value ?: arrayListOf()
-                                    val newMovies = response.body()?.movies ?: arrayListOf()
-                                    val movies = mutableListOf<Movie>().apply {
+                                    val oldMovies = this.movies.value ?: mutableListOf()
+                                    val newMovies = response.body()?.movies ?: mutableListOf()
+                                    remote = mutableListOf<Movie>().apply {
                                         addAll(oldMovies)
                                         addAll(newMovies)
                                     }
-                                    this.movies.value = movies
-                                    onProgressBarEvent.value = false
                                 }
+
+                                for (movie in remote) {
+                                    local.forEach {
+                                        if (movie.id == it.id) movie.favorite = true
+                                    }
+                                }
+                                movies.value = remote
                             }
                             false -> onMessageError.value = RetrofitException.toHttpError(response).getMessageError()
                         }
@@ -67,7 +76,7 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
     }
 
     fun onRefresh() {
-        getPopularMovies()
+        getPopularMovies(isRefresh = true)
     }
 
     fun getGenresRemote() {
@@ -99,7 +108,7 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe { ids, error ->
-                    onMessageError.value = error.localizedMessage
+                    error?.let { onMessageError.value = it.localizedMessage }
                 }
         )
     }
@@ -116,17 +125,35 @@ class HomeViewModel(val homeRepository: HomeRepository) : BaseViewModel() {
         )
     }
 
+    fun getFavoriteMovies() {
+        addDisposable(
+            homeRepository.getFavorieMovies()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { movies, error ->
+                    moviesLocal.value = movies
+                    error?.let {
+                        onMessageError.value = it.localizedMessage
+                    }
+                }
+        )
+    }
+
     fun addFavorite(movie: Movie) {
+        val newMovies: MutableList<Movie> = mutableListOf()
+        movies.value?.let {
+            newMovies.addAll(it)
+        }
+        val index = newMovies.indexOf(movie)
+        val newMovie = newMovies[index].copy(favorite = true)
+        newMovies[index] = newMovie
+        movies.value = newMovies
         addDisposable(
             homeRepository.insertMovie(movie)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe { row, error ->
-                    if (error == null) onMessageSuccess.value = true else {
-                        onMessageError.value =
-                            error.localizedMessage
-                        error.printStackTrace()
-                    }
+                    onMessageSuccess.value = error == null
                 }
         )
     }

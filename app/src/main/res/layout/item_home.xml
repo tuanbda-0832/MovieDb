@@ -22,8 +22,11 @@
 
             <ImageView
                 android:id="@+id/image_view_backdrop"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:cropToPadding="true"
+                android:scaleType="centerCrop"
                 android:src="@drawable/noimagefound"
                 app:imageUrl="@{item.backdrop_path}"
                 app:layout_constraintBottom_toBottomOf="parent"
