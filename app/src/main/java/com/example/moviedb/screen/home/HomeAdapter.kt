@@ -1,5 +1,6 @@
 package com.example.moviedb.screen.home
 
+import android.view.View
 import com.example.moviedb.R
 import com.example.moviedb.base.BaseAdapter
 import com.example.moviedb.base.BaseViewHolder
@@ -25,12 +26,20 @@ class HomeAdapter(
             it.genre_ids?.let {
                 binding.textViewMovieGenres.setGenres(it, genres)
             }
+            binding.imageViewFavories.visibility = when (it.favorite) {
+                true -> View.GONE
+                else -> View.VISIBLE
+            }
         }
     }
 
     override fun init(binding: ItemHomeBinding) {
-        binding.cardView.setOnClickListener { binding.item?.let(onItemClick) }
-        binding.imageViewFavories.setOnClickListener { binding.item?.let(onFavoriesClick) }
+        binding.cardView.setOnClickListener {
+            binding.item?.let(onItemClick)
+        }
+        binding.imageViewFavories.setOnClickListener {
+            binding.item?.let(onFavoriesClick)
+        }
     }
 
     fun addGenres(genres: List<Genre>) {

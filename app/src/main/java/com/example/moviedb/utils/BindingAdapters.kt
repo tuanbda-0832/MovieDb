@@ -16,7 +16,7 @@ object BindingAdapters {
     @BindingAdapter("imageUrl")
     @JvmStatic
     fun ImageView.loadImage(backdropPath: String?) {
-        val cropOptions = RequestOptions().centerCrop()
+        val cropOptions = RequestOptions().centerCrop().placeholder(ColorDrawable(Color.GRAY))
         val builder = StringBuilder(Constant.BASE_URL_IMG)
         Glide.with(this.context)
             .applyDefaultRequestOptions(cropOptions)

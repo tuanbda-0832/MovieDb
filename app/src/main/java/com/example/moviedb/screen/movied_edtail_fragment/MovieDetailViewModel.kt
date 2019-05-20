@@ -13,12 +13,16 @@ class MovieDetailViewModel(val homeRepository: HomeRepository) : BaseViewModel()
     val movieDetail: MutableLiveData<MovieDetail> = MutableLiveData()
     val onMessageError = SingleLiveEvent<String>()
 
+    val onProgressBarEvent = SingleLiveEvent<Boolean>()
+
     fun getMovieDetails(id: Int) {
+        onProgressBarEvent.value = true
         addDisposable(
             homeRepository.getMovieDetails(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { response, error ->
+                    onProgressBarEvent.value = false
                     response?.let {
                         when (it.isSuccessful) {
                             true -> movieDetail.value = it.body()

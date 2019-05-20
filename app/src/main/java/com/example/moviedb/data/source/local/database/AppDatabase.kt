@@ -8,8 +8,12 @@ import com.example.moviedb.data.model.Movie
 import com.example.moviedb.data.source.local.dao.GenreDao
 import com.example.moviedb.data.source.local.dao.MovieDao
 import com.example.moviedb.utils.Converters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.migration.Migration
 
-@Database(entities = [Movie::class, Genre::class], version = 1)
+
+
+@Database(entities = [Movie::class, Genre::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 

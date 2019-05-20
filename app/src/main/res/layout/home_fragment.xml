@@ -15,6 +15,18 @@
         android:layout_height="match_parent"
         tools:context=".screen.home.HomeFragment">
 
+        <ProgressBar
+            android:id="@+id/progress_bar_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/dp_4"
+            android:indeterminateDrawable="@drawable/progress_bar_bg"
+            app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/swipe_refresh_layout"
+            app:setVisibility="@{viewModel.onProgessBarRecyclerView}" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="0dp"
@@ -41,10 +53,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminateDrawable="@drawable/progress_bar_bg"
-            app:setVisibility="@{viewModel.onProgressBarEvent}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:setVisibility="@{viewModel.onProgressBarEvent}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
